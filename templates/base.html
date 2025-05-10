@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }} - EngeOrçe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="topbar-linha">
+        <div class="sidebar-header">
+            <span class="sidebar-title">EngeOrçe</span>
+            <button class="sidebar-toggle" id="toggleSidebar" title="Ocultar/Exibir menu">
+                <span class="material-icons md-grey">menu</span>
+            </button>
+        </div>
+        <div class="faixa-cinza"></div>
+    </div>
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li>
+                    <a href="{{ url_for('inicio') }}">
+                        <span class="material-icons md-grey">home</span>
+                        Início
+                    </a>
+                </li>
+                <li class="has-submenu{% if request.path.startswith('/orcamentos') %} submenu-aberto{% endif %}" id="orcamentosMenu">
+                    <a href="{{ url_for('lista_orcamentos') }}" id="orcamentosLink">
+                        <span class="material-icons md-grey">list</span>
+                        Orçamentos
+                        <span class="material-icons submenu-arrow">expand_more</span>
+                    </a>
+                    <ul class="submenu" id="orcamentosSubmenu">
+                        <li><a href="{{ url_for('lista_orcamentos') }}">Lista de orçamentos</a></li>
+                        <li><a href="#">Criar orçamento</a></li>
+                        <li><a href="#">Editar orçamento</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ url_for('insumos') }}">
+                        <span class="material-icons md-grey">inventory_2</span>
+                        Insumos
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('composicoes') }}">
+                        <span class="material-icons md-grey">layers</span>
+                        Composições
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('planejamentos') }}">
+                        <span class="material-icons md-grey">event</span>
+                        Planejamentos
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('cadastros') }}">
+                        <span class="material-icons md-grey">folder</span>
+                        Cadastros
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('administracao') }}">
+                        <span class="material-icons md-grey">settings</span>
+                        Administração
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <button class="sidebar-toggle-float" id="toggleSidebarFloat" title="Exibir menu">
+            <span class="material-icons md-grey">menu</span>
+        </button>
+        <main class="content" id="mainContent">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script>
+    (function() {
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const toggleBtnFloat = document.getElementById('toggleSidebarFloat');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const orcamentosMenu = document.getElementById('orcamentosMenu');
+        const orcamentosLink = document.getElementById('orcamentosLink');
+        const submenuArrow = document.querySelector('#orcamentosLink .submenu-arrow');
+
+        function ocultarSidebar() {
+            sidebar.classList.add('sidebar-oculta');
+            mainContent.classList.add('content-expandida');
+            toggleBtnFloat.style.display = 'block';
+        }
+
+        function exibirSidebar() {
+            sidebar.classList.remove('sidebar-oculta');
+            mainContent.classList.remove('content-expandida');
+            toggleBtnFloat.style.display = 'none';
+        }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', ocultarSidebar);
+        if (toggleBtnFloat) toggleBtnFloat.addEventListener('click', exibirSidebar);
+
+        if (!sidebar.classList.contains('sidebar-oculta')) {
+            toggleBtnFloat.style.display = 'none';
+        }
+
+        // Novo comportamento: só fecha o submenu ao clicar em outro menu principal
+        document.querySelectorAll('.sidebar > ul > li:not(.has-submenu)').forEach(function(menuItem) {
+            menuItem.addEventListener('click', function() {
+                if (orcamentosMenu.classList.contains('submenu-aberto')) {
+                    orcamentosMenu.classList.remove('submenu-aberto');
+                }
+            });
+        });
+
+        // Permite abrir o submenu manualmente pelo clique, mas não fecha ao clicar fora
+        if (orcamentosLink) {
+            orcamentosLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                orcamentosMenu.classList.add('submenu-aberto');
+            });
+        }
+    })();
+    </script>
+</body>
+</html>

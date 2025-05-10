@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-container">
+        <h1 class="titulo-orcamentos">Orçamentos</h1>
+        <!-- Faixa cinza escuro dos filtros -->
+        <form class="filtros-orcamentos">
+            <div class="filtro-titulo">
+                <span class="material-icons filtro-icone">filter_list</span>
+                <span class="filtro-texto">FILTRO DE PESQUISA</span>
+            </div>
+            <div class="filtro-campos">
+                <select>
+                    <option>ID/CÓDIGO</option>
+                    <option>DESCRIÇÃO</option>
+                </select>
+                <input type="text" placeholder="BUSCAR...">
+                <select>
+                    <option>MAIS RECENTE</option>
+                    <option>MAIS ANTIGO</option>
+                </select>
+                <select>
+                    <option>CLIENTE</option>
+                    {% for cliente in clientes %}
+                    <option>{{ cliente|upper }}</option>
+                    {% endfor %}
+                </select>
+                <select>
+                    <option>ESTADO</option>
+                    {% for estado in estados %}
+                    <option>{{ estado|upper }}</option>
+                    {% endfor %}
+                </select>
+                <select>
+                    <option>CIDADE</option>
+                    {% for cidade in cidades %}
+                    <option>{{ cidade|upper }}</option>
+                    {% endfor %}
+                </select>
+                <select>
+                    <option>ANO</option>
+                    {% for ano in anos %}
+                    <option>{{ ano }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" title="Buscar">
+                    <span class="material-icons md-grey">search</span>
+                </button>
+            </div>
+        </form>
+
+        <form id="formOrcamentos">
+            <table class="tabela-orcamentos">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">
+                            <input type="checkbox" id="selecionarTodos">
+                        </th>
+                        <th style="width: 80px;">ID/CÓDIGO</th>
+                        <th style="width: 220px;">PROJETO</th>
+                        <th style="width: 90px;">DATA</th>
+                        <th style="width: 140px;">CIDADE/UF</th>
+                        <th style="width: 100px;">BASE</th>
+                        <th style="width: 220px;">CLIENTE</th>
+                        <th style="width: 90px; text-align: center;">AÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orcamento in orcamentos %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="orcamento_id" value="{{ orcamento.id }}">
+                        </td>
+                        <td>{{ orcamento.id }}</td>
+                        <td>{{ orcamento.projeto }}</td>
+                        <td>{{ orcamento.data }}</td>
+                        <td>{{ orcamento.cidade_uf }}</td>
+                        <td>{{ orcamento.base }}</td>
+                        <td>{{ orcamento.cliente }}</td>
+                        <td style="text-align: center;">
+                            <button type="button" 
+                                    onclick="excluirOrcamento({{ orcamento.id }})" 
+                                    title="Excluir" 
+                                    class="btn-acao">
+                                <span class="material-icons md-grey">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" 
+                    onclick="excluirSelecionados()" 
+                    class="btn-excluir">
+                Excluir Selecionados
+            </button>
+        </form>
+    </div>
+
+    <script>
+    // Selecionar todos os checkboxes
+    document.getElementById('selecionarTodos').addEventListener('change', function(e) {
+        const checkboxes = document.querySelectorAll('input[name="orcamento_id"]');
+        checkboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+    });
+
+    function excluirSelecionados() {
+        const selecionados = Array.from(
+            document.querySelectorAll('input[name="orcamento_id"]:checked')
+        ).map(cb => cb.value);
+        
+        if (selecionados.length === 0) {
+            alert('Selecione pelo menos um orçamento para excluir.');
+            return;
+        }
+        
+        if (confirm(`Deseja excluir ${selecionados.length} orçamento(s)?`)) {
+            console.log('Orçamentos a excluir:', selecionados);
+        }
+    }
+
+    function excluirOrcamento(id) {
+        if (confirm('Deseja excluir este orçamento?')) {
+            console.log('Excluir orçamento:', id);
+        }
+    }
+    </script>
+{% endblock %}

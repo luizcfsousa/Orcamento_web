@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1 style="text-align:center;">Bem-vindo ao EngeOrçe!</h1>
+    <div style="text-align:center; margin: 24px 0;">
+        <!-- Espaço reservado para o logotipo -->
+        <div style="width:150px; height:70px; margin:0 auto; border:1px dashed #bbb; display:flex; align-items:center; justify-content:center;">
+            Logotipo da Empresa
+        </div>
+    </div>
+
+    <div style="display:flex; justify-content: center; gap: 32px; margin-bottom: 32px;">
+        <div style="padding:16px 24px; border:1px solid #ddd; border-radius:8px; background:#fafafa; text-align:center; min-width:140px;">
+            <div style="font-size:1.1em; margin-bottom:8px;">Projetos em {{ now.strftime('%B')|capitalize }}</div>
+            <div style="font-size:2em; font-weight:bold;">{{ projetos_mes }}</div>
+        </div>
+        <div style="padding:16px 24px; border:1px solid #ddd; border-radius:8px; background:#fafafa; text-align:center; min-width:140px;">
+            <div style="font-size:1.1em; margin-bottom:8px;">Projetos em {{ now.year }}</div>
+            <div style="font-size:2em; font-weight:bold;">{{ projetos_ano }}</div>
+        </div>
+        <div style="padding:16px 24px; border:1px solid #ddd; border-radius:8px; background:#fafafa; text-align:center; min-width:140px;">
+            <div style="font-size:1.1em; margin-bottom:8px;">Total de projetos</div>
+            <div style="font-size:2em; font-weight:bold;">{{ projetos_total }}</div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 24px; justify-content: center; align-items: flex-start; margin-top: 32px;">
+        <!-- Projetos não finalizados -->
+        <div style="flex:1; min-width:220px;">
+            <h2 style="text-align:center;">Projetos não finalizados</h2>
+            <ul style="list-style:none; padding:0;">
+                {% for projeto in projetos_nao_finalizados %}
+                <li style="margin-bottom:16px; border:1px solid #eee; border-radius:6px; padding:12px 10px; background:#f9f9f9;">
+                    <a href="#" style="color:#222; text-decoration:underline; cursor:pointer;">
+                        <strong>{{ projeto.nome }}</strong>
+                    </a>
+                    <br>
+                    <small>Criado em {{ projeto.data.strftime('%d/%m/%Y') }}</small>
+                </li>
+                {% else %}
+                <li>Nenhum projeto não finalizado.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Projetos recentes -->
+        <div style="flex:1; min-width:220px;">
+            <h2 style="text-align:center;">Projetos recentes</h2>
+            <ul style="list-style:none; padding:0;">
+                {% for projeto in projetos_recentes %}
+                <li style="margin-bottom:16px; border:1px solid #eee; border-radius:6px; padding:12px 10px; background:#f9f9f9;">
+                    <a href="#" style="color:#222; text-decoration:underline; cursor:pointer;">
+                        <strong>{{ projeto.nome }}</strong>
+                    </a>
+                    <br>
+                    <small>Criado em {{ projeto.data.strftime('%d/%m/%Y') }} - Status: {{ projeto.status|capitalize }}</small>
+                </li>
+                {% else %}
+                <li>Nenhum projeto recente.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Projetos em andamento -->
+        <div style="flex:1; min-width:220px;">
+            <h2 style="text-align:center;">Projetos em andamento</h2>
+            <ul style="list-style:none; padding:0;">
+                {% for projeto in projetos_andamento %}
+                <li style="margin-bottom:16px; border:1px solid #eee; border-radius:6px; padding:12px 10px; background:#f9f9f9;">
+                    <a href="#" style="color:#222; text-decoration:underline; cursor:pointer;">
+                        <strong>{{ projeto.nome }}</strong>
+                    </a>
+                    <br>
+                    <small>Criado em {{ projeto.data.strftime('%d/%m/%Y') }}</small>
+                </li>
+                {% else %}
+                <li>Nenhum projeto em andamento.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
