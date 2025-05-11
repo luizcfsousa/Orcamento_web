@@ -1,2 +1,2 @@
 # Engeorce
-Serviços Especializados em Gestão de Obras
+Serviço Especializado em Gestão de Obras
